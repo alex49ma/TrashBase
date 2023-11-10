@@ -61,7 +61,7 @@ public class methods {
     public static void updateBin(RoutingContext ctx){
 		String idDev = ctx.pathParam("idDev");
 		JsonObject dev = ctx.body().asJsonObject();
-		Device device = new Device(dev.getInteger("idDevice"), dev.getString("name"));
+		Device device = new Device(Integer.parseInt(idDev), dev.getString("name"));
 
         MySQLVerticle.mySqlClient.query("UPDATE device set name = '" + device.getName() + "' WHERE idDevice = " + idDev + ";").execute().onComplete(async -> {
 			if (async.succeeded()) {
