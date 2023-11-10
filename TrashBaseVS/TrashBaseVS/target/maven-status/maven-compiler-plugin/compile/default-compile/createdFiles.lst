@@ -1,0 +1,10 @@
+com\trashbase\entities\Device.class
+com\trashbase\Receiver.class
+com\trashbase\entities\Actuator.class
+com\trashbase\Rest\RestClientUtil.class
+com\trashbase\Launcher.class
+com\trashbase\MySQLVertx_old_methods.class
+com\trashbase\entities\Sensor.class
+com\trashbase\methods.class
+com\trashbase\MySQLVerticle.class
+com\trashbase\MQTTVerticle.class

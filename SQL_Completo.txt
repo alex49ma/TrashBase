@@ -1,0 +1,57 @@
+CREATE TABLE `devices` (
+  `idDevice` int NOT NULL,
+  `name` varchar(32) NOT NULL,
+  PRIMARY KEY (`idDevice`),
+  UNIQUE KEY `idBoard_UNIQUE` (`idDevice`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TABLE `periods` (
+  `idPeriod` int NOT NULL AUTO_INCREMENT,
+  `initDate` date NOT NULL,
+  `endDate` date DEFAULT NULL COMMENT 'If null, the period is still open and the bin is still in this state.',
+  `state` varchar(45) NOT NULL,
+  `idDevice` int NOT NULL,
+  PRIMARY KEY (`idPeriod`),
+  KEY `idDevice_idx` (`idDevice`),
+  CONSTRAINT `idDevice` FOREIGN KEY (`idDevice`) REFERENCES `devices` (`idDevice`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Every time we open or close a bin, a new entry will be created. It will store how long it has been in the last state (open/closed)'
+
+CREATE TABLE `sensors` (
+  `idSensor` int NOT NULL,
+  `idDevice` int NOT NULL,
+  `state` varchar(45) NOT NULL,
+  PRIMARY KEY (`idSensor`),
+  UNIQUE KEY `idBoard_UNIQUE` (`idSensor`),
+  KEY `fk_sensors_devices1_idx` (`idDevice`),
+  CONSTRAINT `fk_sensors_devices1` FOREIGN KEY (`idDevice`) REFERENCES `devices` (`idDevice`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TABLE `actuators` (
+  `idActuator` int NOT NULL,
+  `state` varchar(6) NOT NULL,
+  `idDevice` int NOT NULL,
+  PRIMARY KEY (`idActuator`),
+  UNIQUE KEY `idBoard_UNIQUE` (`idActuator`),
+  KEY `fk_actuators_devices1_idx` (`idDevice`),
+  CONSTRAINT `fk_actuators_devices1` FOREIGN KEY (`idDevice`) REFERENCES `devices` (`idDevice`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+INSERT INTO devices (idDevice, name) VALUES (1, 'eagle');
+INSERT INTO devices (idDevice, name) VALUES (2, 'crab');
+INSERT INTO devices (idDevice, name) VALUES (3, 'snake');
+
+INSERT INTO sensors (idSensor, idDevice, state) VALUES (1, 1, "idle");
+INSERT INTO sensors (idSensor, idDevice) VALUES (2, 2);
+INSERT INTO sensors (idSensor, idDevice) VALUES (3, 3);
+INSERT INTO sensors (idSensor, idDevice, state) VALUES (4, 1, "idle");
+
+INSERT INTO actuators (idActuator, state, idDevice) VALUES (1, 'open', 1);
+INSERT INTO actuators (idActuator, state, idDevice) VALUES (2, 'locked', 2);
+INSERT INTO actuators (idActuator, state, idDevice) VALUES (3, 'open', 3);
+INSERT INTO actuators (idActuator, state, idDevice) VALUES (4, 'locked', 1);
+
+INSERT INTO periods (idPeriod, initDate, endDate, state, idDevice) VALUES (1, '2023-09-01', '2023-09-07', 'open', 1);
+INSERT INTO periods (idPeriod, initDate, endDate, state, idDevice) VALUES (2, '2023-09-03', '2023-09-08', 'open', 2);
+INSERT INTO periods (idPeriod, initDate, state, idDevice) VALUES (3, '2023-09-01', 'open', 3);
+INSERT INTO periods (idPeriod, initDate, state, idDevice) VALUES (4, '2023-09-07', 'closed', 1);
+INSERT INTO periods (idPeriod, initDate, state, idDevice) VALUES (5, '2023-09-08', 'closed', 2);
