@@ -138,7 +138,7 @@ public class methods {
     public static void updateSens(RoutingContext ctx){
 		String idSens = ctx.pathParam("idSens");
 		JsonObject sens = ctx.body().asJsonObject();
-		Sensor sensor = new Sensor(sens.getInteger("idSensor"), sens.getInteger("idDevice"), sens.getString("state"));
+		Sensor sensor = new Sensor(Integer.parseInt(idSens), sens.getInteger("idDevice"), sens.getString("state"));
 
         MySQLVerticle.mySqlClient.query("UPDATE sensors set idDevice = " + sensor.getIdDevice() + ", state = '" + sensor.getState() + "' WHERE idSensor = " + idSens + ";").execute().onComplete(async -> {
 			if (async.succeeded()) {
